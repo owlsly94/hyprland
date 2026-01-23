@@ -4,6 +4,7 @@ base
 base-devel
 bibata-cursor-theme-bin
 bitwarden
+brave-bin
 bridge-utils
 btop
 dnsmasq
@@ -87,7 +88,6 @@ steam
 steam-native-runtime
 sudo
 swww
-thorium-browser-bin
 thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
