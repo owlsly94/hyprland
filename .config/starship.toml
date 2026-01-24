@@ -32,7 +32,7 @@ add_newline = true
 show_always = true
 style_user = "bg:#24283b fg:#c0caf5"
 style_root = "bg:#24283b fg:#f7768e"
-format = '[ $user ]($style)'
+format = '[󰏒  $user ]($style)'
 
 [directory]
 style = "bg:#414868 fg:#7dcfff"
@@ -41,6 +41,7 @@ truncation_length = 3
 truncation_symbol = "…/"
 
 [directory.substitutions]
+"~" = " "
 "Documents" = "󰈙 "
 "Downloads" = " "
 "Music" = "󰝚 "
@@ -68,7 +69,6 @@ time_format = "%R"
 style = "bg:#bb9af7 fg:#1a1b26"
 format = '[ $time ]($style)'
 
-# Language Modules (Unified Tokyo Blue)
 [c]
 symbol = " "
 style = "bg:#7aa2f7 fg:#1a1b26"
