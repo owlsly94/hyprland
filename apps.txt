@@ -20,6 +20,7 @@ gamemode
 gamescope
 gcc
 git
+glow
 grim
 grub
 gst-plugin-pipewire
@@ -57,6 +58,7 @@ nano
 neovim
 network-manager-applet
 networkmanager
+noto-fonts-emoji
 npm
 nwg-look
 obs-studio
@@ -68,6 +70,7 @@ pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
+polkit-gnome
 polkit-kde-agent
 prismlauncher
 protonup-qt
@@ -77,6 +80,7 @@ qt5-wayland
 qt5ct
 qt6-wayland
 qt6ct
+radeontop
 ranger
 rocm-smi-lib
 rsync
@@ -96,6 +100,7 @@ tldr
 tokyonight-gtk-theme-git
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
+ttf-joypixels
 ueberzug
 unzip
 uwsm
@@ -128,6 +133,8 @@ xf86-video-amdgpu
 xf86-video-ati
 xorg-server
 xorg-xinit
+yay
+yay-debug
 zip
 zoxide
 zram-generator
