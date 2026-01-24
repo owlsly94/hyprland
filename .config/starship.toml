@@ -42,11 +42,11 @@ truncation_symbol = "…/"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
-"Downloads" = "󰇚 "
+"Downloads" = " "
 "Music" = "󰝚 "
-"Pictures" = "󰙏 "
+"Pictures" = " "
 "Videos" = "󰕧 "
-".config" = "󱁊 "
+".config" = " "
 
 [git_branch]
 symbol = "󰘬"
