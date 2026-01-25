@@ -4,7 +4,6 @@ base
 base-devel
 bibata-cursor-theme-bin
 bitwarden
-brave-bin
 bridge-utils
 btop
 dnsmasq
@@ -21,6 +20,7 @@ gamescope
 gcc
 git
 glow
+gnome-keyring
 grim
 grub
 gst-plugin-pipewire
@@ -110,6 +110,7 @@ vdpauinfo
 vim
 virt-manager
 virt-viewer
+vivaldi
 vkd3d
 vulkan-mesa-layers
 vulkan-radeon
