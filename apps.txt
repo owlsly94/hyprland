@@ -110,7 +110,7 @@ vdpauinfo
 vim
 virt-manager
 virt-viewer
-vivaldi
+google-chrome
 vkd3d
 vulkan-mesa-layers
 vulkan-radeon
