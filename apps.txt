@@ -1,11 +1,14 @@
 alacritty
 amd-ucode
+audacity
 base
 base-devel
 bibata-cursor-theme-bin
 bitwarden
 bridge-utils
 btop
+cmake
+discord
 dnsmasq
 dolphin
 dunst
@@ -13,6 +16,7 @@ efibootmgr
 eza
 fastfetch
 faugus-launcher
+ffmpeg
 ffmpegthumbnailer
 firefox
 flite
@@ -22,10 +26,12 @@ gcc
 git
 glow
 gnome-keyring
+google-chrome
 grim
 grub
 gst-plugin-pipewire
 gvfs
+helvum
 htop
 hyprland
 hyprlock
@@ -34,6 +40,7 @@ imv
 iptables-nft
 iwd
 jellyfin-desktop
+kdenlive
 kitty
 kvantum
 kvantum-qt5
@@ -51,11 +58,14 @@ libpulse
 libva-utils
 linux-firmware
 linux-lts
+linux-zen
+linux-zen-headers
 make
 mangohud
 mkinitcpio-firmware
 mpv
 nano
+nbtexplorer-bin
 neovim
 network-manager-applet
 networkmanager
@@ -99,6 +109,7 @@ thunar-media-tags-plugin
 thunar-volman
 tldr
 tokyonight-gtk-theme-git
+topgrade-bin
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
 ttf-joypixels
@@ -111,7 +122,6 @@ vdpauinfo
 vim
 virt-manager
 virt-viewer
-google-chrome
 vkd3d
 vulkan-mesa-layers
 vulkan-radeon
