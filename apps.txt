@@ -12,6 +12,7 @@ dunst
 efibootmgr
 eza
 fastfetch
+faugus-launcher
 ffmpegthumbnailer
 firefox
 flite
