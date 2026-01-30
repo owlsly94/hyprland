@@ -3,6 +3,7 @@ amd-ucode
 audacity
 base
 base-devel
+bash-completion
 bibata-cursor-theme-bin
 bitwarden
 bridge-utils
@@ -12,6 +13,7 @@ discord
 dnsmasq
 dolphin
 dunst
+easyeffects
 efibootmgr
 eza
 fastfetch
@@ -122,6 +124,7 @@ vdpauinfo
 vim
 virt-manager
 virt-viewer
+visual-studio-code-bin
 vkd3d
 vulkan-mesa-layers
 vulkan-radeon
@@ -151,3 +154,4 @@ zip
 zoxide
 zram-generator
 zsh
+zsh-completions
