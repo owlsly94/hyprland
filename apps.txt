@@ -12,6 +12,7 @@ chaotic-keyring
 chaotic-mirrorlist
 cmake
 discord
+dmidecode
 dnsmasq
 dolphin
 dunst
@@ -26,6 +27,7 @@ flite
 gamemode
 gamescope
 git
+glmark2
 glow
 gnome-keyring
 google-chrome
@@ -48,6 +50,7 @@ kdenlive
 kitty
 kvantum
 kvantum-qt5
+lact
 less
 lib32-gamemode
 lib32-gcc-libs
