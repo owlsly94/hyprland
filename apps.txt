@@ -93,6 +93,7 @@ power-profiles-daemon
 prismlauncher
 protonup-qt
 pyprland
+python-pipx
 qemu-full
 qt5-wayland
 qt5ct
