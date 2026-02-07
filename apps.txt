@@ -104,6 +104,7 @@ rate-mirrors
 rocm-smi-lib
 rofimoji
 rsync
+rust
 sddm
 seahorse
 slurp
