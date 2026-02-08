@@ -12,7 +12,7 @@
 <hr />
 <div align="center">
 <p>
-   The script is written for Arch and Arch based distributions only! <br/>
+   The script is written for Arch Linux only! <br/>
 </p>
 </div>
 
@@ -26,4 +26,8 @@ cd hyprland
 ```
 chmod +x install.sh
 sh install.sh
+```
+3. Make sure that gamemode deamon is running:
+```
+gamemoded -t
 ```
