@@ -6,6 +6,7 @@
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/owlsly94/hyprland?style=for-the-badge&color=a6e3a1&logoColor=D9E0EE&labelColor=292324)
 ![GitHub Repo stars](https://img.shields.io/github/stars/owlsly94/hyprland?style=for-the-badge&color=74c7ec&logoColor=D9E0EE&labelColor=292324&logo=andela)
+![GitHub repo size](https://img.shields.io/github/repo-size/owlsly94/hyprland?style=for-the-badge&color=cba6f7&logoColor=D9E0EE&labelColor=292324&logo=protondrive)
 
 </div>
 <hr />
