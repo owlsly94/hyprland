@@ -9,6 +9,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/owlsly94/hyprland?style=for-the-badge&color=cba6f7&logoColor=D9E0EE&labelColor=292324&logo=protondrive)
 
 </div>
+<hr />
 <div align="center">
 </div>
 
@@ -30,3 +31,5 @@ sh install.sh
 ```
 gamemoded -t
 ```
+4. To set a wallpaper, either use:
+for random wallpaper `WINDOWS KEY + W` or if you wanna chose you wallpaper `WINDOWS KEY + SHIFT KEY + W`
