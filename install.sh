@@ -107,7 +107,7 @@ CONFIG_FILES=(
 # Loop through folders
 for folder in "${CONFIG_FOLDERS[@]}"; do
     echo "Fetching $folder..."
-    npx degit owlsly94/dotfiles/.config/$folder ~/.config/$folder --force
+    npx --yes degit owlsly94/dotfiles/.config/$folder ~/.config/$folder --force
 done
 
 # Loop through specific files
