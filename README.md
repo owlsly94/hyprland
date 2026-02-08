@@ -31,6 +31,6 @@ sh install.sh
 ```
 gamemoded -t
 ```
-4. To set a wallpaper, either use:
+4. To set a wallpaper, either use:<br>
 for random wallpaper `WINDOWS KEY + W` <br>
 or if you wanna choose your wallpaper `WINDOWS KEY + SHIFT KEY + W`
