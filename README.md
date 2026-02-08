@@ -9,11 +9,11 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/owlsly94/hyprland?style=for-the-badge&color=cba6f7&logoColor=D9E0EE&labelColor=292324&logo=protondrive)
 
 </div>
-<hr />
 <div align="center">
+</div>
+
 > [!WARNING]
 > The script is written for Arch Linux only!
-</div>
 
 ## Usage
 1. Clone the repo
