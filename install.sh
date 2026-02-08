@@ -87,6 +87,35 @@ cat <<EOF > "$HOME/.steam/steam/steam_dev.cfg"
 @fDownloadRateImprovementToAddAnotherConnection 1.0
 EOF
 
+# 9. Download Dotfiles using npx degit
+echo "Installing Node.js for dotfile deployment..."
+sudo pacman -S --noconfirm nodejs npm
+
+echo "Downloading configuration folders from GitHub..."
+# List of folders to grab from .config/
+CONFIG_FOLDERS=(
+    "hypr" "kitty" "alacritty" "dunst" "fastfetch" 
+    "mpv" "MangoHud" "nvim" "nwg-look" "pypr" 
+    "ranger" "wallpapers" "waybar" "wlogout" "wofi"
+)
+
+# List of specific files to grab from .config/
+CONFIG_FILES=(
+    "starship.toml" "chrome-flags.conf"
+)
+
+# Loop through folders
+for folder in "${CONFIG_FOLDERS[@]}"; do
+    echo "Fetching $folder..."
+    npx degit owlsly94/dotfiles/.config/$folder ~/.config/$folder --force
+done
+
+# Loop through specific files
+for file in "${CONFIG_FILES[@]}"; do
+    echo "Fetching $file..."
+    curl -fLo ~/.config/$file https://raw.githubusercontent.com/owlsly94/dotfiles/main/.config/$file
+done
+
 echo "-------------------------------------------------------"
 echo "Setup complete! Your Arch system is fully tuned."
 echo "Summary:"
@@ -96,5 +125,6 @@ echo " - CPU: Locked to Performance"
 echo " - Libvirt: Active & Group assigned"
 echo " - SDDM: Autologin to Hyprland enabled"
 echo " - Steam: HTTP2 disabled for faster downloads"
+echo " - Dotfiles: All dotfiles downloaded and set"
 echo ""
 echo "Please REBOOT to apply all changes."
