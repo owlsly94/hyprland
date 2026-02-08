@@ -11,9 +11,8 @@
 </div>
 <hr />
 <div align="center">
-<p>
-   The script is written for Arch Linux only! <br/>
-</p>
+> [!WARNING]
+> The script is written for Arch Linux only!
 </div>
 
 ## Usage
