@@ -12,10 +12,10 @@ sudo sed -i '/\[multilib\]/,/Include/s/^#//' /etc/pacman.conf
 
 # 2. Add Chaotic-AUR
 echo "Configuring Chaotic-AUR..."
-sudo pacman-key --recv-key 305651380455A661 --keyserver keyserver.ubuntu.com
-sudo pacman-key --lsign-key 305651380455A661
-sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-                           'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+sudo pacman-key --lsign-key 3056513887B78AEB
+sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 
 if ! grep -q "\[chaotic-aur\]" /etc/pacman.conf; then
     echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | sudo tee -a /etc/pacman.conf
