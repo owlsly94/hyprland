@@ -68,6 +68,7 @@ linux-lts
 linux-zen
 linux-zen-headers
 localsend
+lutris
 man-db
 mangohud
 megatools
@@ -106,6 +107,7 @@ radeontop
 ranger
 rate-mirrors
 rocm-smi-lib
+rofi
 rofimoji
 rsync
 rust
