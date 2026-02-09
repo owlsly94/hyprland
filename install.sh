@@ -96,7 +96,7 @@ echo "Downloading configuration folders from GitHub..."
 CONFIG_FOLDERS=(
     "hypr" "kitty" "alacritty" "dunst" "fastfetch" 
     "mpv" "MangoHud" "nvim" "nwg-look" "pypr" 
-    "ranger" "wallpapers" "waybar" "wlogout" "wofi"
+    "ranger" "wallpapers" "waybar" "wlogout" "wofi" "rofi"
 )
 
 # List of specific files to grab from .config/
