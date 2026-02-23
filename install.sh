@@ -54,9 +54,25 @@ rate-mirrors --protocol https arch --max-delay 3600 | sudo tee /etc/pacman.d/mir
 echo "Optimizing makepkg for faster compilation..."
 sudo cp /etc/makepkg.conf /etc/makepkg.conf.backup
 CORES=$(nproc)
-sudo sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j${CORES}\"/" /etc/makepkg.conf
-sudo sed -i 's/^COMPRESSXZ=(xz -c -z -)$/COMPRESSXZ=(xz -c -z - --threads=0)/' /etc/makepkg.conf
-sudo sed -i 's/^COMPRESSZST=(zstd -c -z -q -)$/COMPRESSZST=(zstd -c -z -q - --threads=0)/' /etc/makepkg.conf
+
+# Enable parallel compilation
+if grep -q "^#MAKEFLAGS=" /etc/makepkg.conf; then
+    sudo sed -i "s|^#MAKEFLAGS=.*|MAKEFLAGS=\"-j${CORES}\"|" /etc/makepkg.conf
+elif grep -q "^MAKEFLAGS=" /etc/makepkg.conf; then
+    sudo sed -i "s|^MAKEFLAGS=.*|MAKEFLAGS=\"-j${CORES}\"|" /etc/makepkg.conf
+else
+    echo "MAKEFLAGS=\"-j${CORES}\"" | sudo tee -a /etc/makepkg.conf
+fi
+
+# Enable multi-threaded compression for xz
+if grep -q "^COMPRESSXZ=" /etc/makepkg.conf; then
+    sudo sed -i "s|^COMPRESSXZ=.*|COMPRESSXZ=(xz -c -z - --threads=0)|" /etc/makepkg.conf
+fi
+
+# Enable multi-threaded compression for zstd
+if grep -q "^COMPRESSZST=" /etc/makepkg.conf; then
+    sudo sed -i "s|^COMPRESSZST=.*|COMPRESSZST=(zstd -c -z -q - --threads=0)|" /etc/makepkg.conf
+fi
 
 # 5. Sync and Install Yay + Apps
 echo "Installing yay and resolving conflicts..."
