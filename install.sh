@@ -53,9 +53,10 @@ rate-mirrors --protocol https arch --max-delay 3600 | sudo tee /etc/pacman.d/mir
 # 4. Optimize makepkg for faster AUR builds
 echo "Optimizing makepkg for faster compilation..."
 sudo cp /etc/makepkg.conf /etc/makepkg.conf.backup
-sudo sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(nproc)\"/" /etc/makepkg.conf
-sudo sed -i 's/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -z - --threads=0)/' /etc/makepkg.conf
-sudo sed -i 's/COMPRESSZST=(zstd -c -z -q -)/COMPRESSZST=(zstd -c -z -q - --threads=0)/' /etc/makepkg.conf
+CORES=$(nproc)
+sudo sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j${CORES}\"/" /etc/makepkg.conf
+sudo sed -i 's/^COMPRESSXZ=(xz -c -z -)$/COMPRESSXZ=(xz -c -z - --threads=0)/' /etc/makepkg.conf
+sudo sed -i 's/^COMPRESSZST=(zstd -c -z -q -)$/COMPRESSZST=(zstd -c -z -q - --threads=0)/' /etc/makepkg.conf
 
 # 5. Sync and Install Yay + Apps
 echo "Installing yay and resolving conflicts..."
