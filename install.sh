@@ -100,13 +100,8 @@ sudo udevadm control --reload-rules
 # 7. Swappiness & Kernel Tuning
 echo "Tuning kernel parameters for desktop use..."
 sudo tee /etc/sysctl.d/99-desktop.conf <<EOF
-# Reduce swap usage - good for 16GB RAM
 vm.swappiness=10
-
-# Keep directory/inode cache longer for snappier filesystem feel
 vm.vfs_cache_pressure=50
-
-# Better network throughput (BBR)
 net.core.default_qdisc=fq
 net.ipv4.tcp_congestion_control=bbr
 EOF
@@ -141,21 +136,12 @@ echo "fstrim.timer enabled and started."
 # 10. /etc/environment - GPU, Wayland, VA-API optimizations
 echo "Configuring /etc/environment for AMD GPU + Wayland..."
 sudo tee /etc/environment <<EOF
-# Vulkan - use Mesa RADV driver
 AMD_VULKAN_ICD=RADV
-
-# RADV performance experiments (GPL = faster shader compile, transfer_queue = async uploads)
 RADV_PERFTEST=gpl,transfer_queue
-
-# VA-API / Video Decode
 LIBVA_DRIVER_NAME=radeonsi
 VDPAU_DRIVER=radeonsi
-
-# Shader Cache
 MESA_SHADER_CACHE_DISABLE=false
 MESA_DISK_CACHE_SINGLE_FILE=1
-
-# Wayland - force native Wayland for common app frameworks
 MOZ_ENABLE_WAYLAND=1
 ELECTRON_OZONE_PLATFORM_HINT=wayland
 QT_QPA_PLATFORM=wayland
