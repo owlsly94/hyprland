@@ -9,7 +9,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 trap 'echo "Error occurred at line $LINENO. Check $LOG_FILE for details."; exit 1' ERR
 
 # Check if running as root
-if [ "$EEID" -eq 0 ]; then 
+if [ "$EUID" -eq 0 ]; then 
     echo "Don't run this script as root (it uses sudo internally)"
     exit 1
 fi
@@ -97,51 +97,73 @@ ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue
 EOF
 sudo udevadm control --reload-rules
 
-# 7. Swappiness Tuning
-echo "Tuning swappiness for desktop use..."
-echo "vm.swappiness=10" | sudo tee /etc/sysctl.d/99-swappiness.conf
-sudo sysctl -p /etc/sysctl.d/99-swappiness.conf
+# 7. Swappiness & Kernel Tuning
+echo "Tuning kernel parameters for desktop use..."
+sudo tee /etc/sysctl.d/99-desktop.conf <<EOF
+# Reduce swap usage - good for 16GB RAM
+vm.swappiness=10
 
-# 8. CPU Governor Rules & Service
-echo "Setting up CPU Performance Governor..."
+# Keep directory/inode cache longer for snappier filesystem feel
+vm.vfs_cache_pressure=50
 
-# Check if performance governor is available
-if [ -f /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors ]; then
-    if grep -q "performance" /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors; then
-        sudo tee /etc/udev/rules.d/99-cpu-governor.rules <<EOF
+# Better network throughput (BBR)
+net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr
+EOF
+
+sudo sysctl --system
+echo "Kernel parameters applied."
+
+# 8. CPU Governor - cpupower
+echo "Installing cpupower and setting performance governor..."
+sudo pacman -S --noconfirm cpupower
+
+# Set governor in cpupower config
+sudo sed -i "s/^#governor=.*/governor='performance'/" /etc/default/cpupower 2>/dev/null || \
+    echo "governor='performance'" | sudo tee -a /etc/default/cpupower
+
+sudo cpupower frequency-set -g performance
+sudo systemctl enable --now cpupower
+echo "CPU governor set to performance via cpupower."
+
+# Also set via udev for redundancy
+sudo tee /etc/udev/rules.d/99-cpu-governor.rules <<EOF
 ACTION=="add", SUBSYSTEM=="cpu", KERNEL=="cpu[0-9]*", ATTR{cpufreq/scaling_governor}="performance"
 EOF
+sudo udevadm control --reload-rules && sudo udevadm trigger
 
-        sudo udevadm control --reload-rules && sudo udevadm trigger
-        echo "performance" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+# 9. Enable TRIM for SSD/NVMe longevity
+echo "Enabling weekly TRIM for NVMe/SSD..."
+sudo systemctl enable fstrim.timer
+sudo systemctl start fstrim.timer
+echo "fstrim.timer enabled and started."
 
-        sudo tee /etc/systemd/system/cpu-governor.service <<EOF
-[Unit]
-Description=Set CPU Governor to Performance
-After=multi-user.target
+# 10. /etc/environment - GPU, Wayland, VA-API optimizations
+echo "Configuring /etc/environment for AMD GPU + Wayland..."
+sudo tee /etc/environment <<EOF
+# Vulkan - use Mesa RADV driver
+AMD_VULKAN_ICD=RADV
 
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c "echo performance | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor"
+# RADV performance experiments (GPL = faster shader compile, transfer_queue = async uploads)
+RADV_PERFTEST=gpl,transfer_queue
 
-[Install]
-WantedBy=multi-user.target
+# VA-API / Video Decode
+LIBVA_DRIVER_NAME=radeonsi
+VDPAU_DRIVER=radeonsi
+
+# Shader Cache
+MESA_SHADER_CACHE_DISABLE=false
+MESA_DISK_CACHE_SINGLE_FILE=1
+
+# Wayland - force native Wayland for common app frameworks
+MOZ_ENABLE_WAYLAND=1
+ELECTRON_OZONE_PLATFORM_HINT=wayland
+QT_QPA_PLATFORM=wayland
+SDL_VIDEODRIVER=wayland
 EOF
+echo "/etc/environment configured."
 
-        sudo systemctl enable --now cpu-governor.service
-        echo "CPU governor set to performance"
-    else
-        echo "Warning: Performance governor not available on this system"
-    fi
-else
-    echo "Warning: CPU frequency scaling not available (VM or unsupported CPU?)"
-fi
-
-# 9. Enable TRIM for SSD longevity
-echo "Enabling weekly TRIM for SSD..."
-sudo systemctl enable --now fstrim.timer
-
-# 10. Paccache Cleanup Hook
+# 11. Paccache Cleanup Hook
 echo "Setting up automatic pacman cache cleanup..."
 sudo mkdir -p /etc/pacman.d/hooks
 sudo tee /etc/pacman.d/hooks/clean-cache.hook <<EOF
@@ -158,7 +180,7 @@ When = PostTransaction
 Exec = /usr/bin/paccache -rk2
 EOF
 
-# 11. Rate-mirrors Monthly Timer
+# 12. Rate-mirrors Monthly Timer
 echo "Setting up monthly mirror rating..."
 sudo tee /etc/systemd/system/rate-mirrors.service <<EOF
 [Unit]
@@ -185,7 +207,7 @@ EOF
 
 sudo systemctl enable rate-mirrors.timer
 
-# 12. Zram Setup (compressed RAM swap)
+# 13. Zram Setup (compressed RAM swap)
 echo "Setting up zram..."
 sudo pacman -S --noconfirm zram-generator
 sudo tee /etc/systemd/zram-generator.conf <<EOF
@@ -194,18 +216,18 @@ zram-size = ram / 2
 compression-algorithm = zstd
 EOF
 
-# 13. Earlyoom (prevents system freeze from OOM)
+# 14. Earlyoom (prevents system freeze from OOM)
 echo "Installing and enabling earlyoom..."
 sudo pacman -S --noconfirm earlyoom
 sudo systemctl enable --now earlyoom
 
-# 14. Improve Font Rendering
+# 15. Improve Font Rendering
 echo "Improving font rendering for LCD monitors..."
 sudo mkdir -p /etc/fonts/conf.d
 sudo ln -sf /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
 sudo ln -sf /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/
 
-# 15. Libvirt Configuration
+# 16. Libvirt Configuration
 echo "Configuring Libvirt..."
 sudo cp /etc/libvirt/libvirtd.conf /etc/libvirt/libvirtd.conf.backup
 sudo sed -i 's/^#unix_sock_group = "libvirt"/unix_sock_group = "libvirt"/' /etc/libvirt/libvirtd.conf
@@ -214,7 +236,7 @@ sudo sed -i 's/^#unix_sock_rw_perms = "0770"/unix_sock_rw_perms = "0770"/' /etc/
 sudo systemctl enable --now libvirtd.service
 sudo usermod -a -G libvirt $USER
 
-# 16. SDDM Autologin Configuration
+# 17. SDDM Autologin Configuration
 echo "Configuring SDDM Autologin for $USER..."
 if [ -f /etc/sddm.conf ]; then
     sudo cp /etc/sddm.conf /etc/sddm.conf.backup
@@ -226,7 +248,7 @@ User=$USER
 Session=hyprland
 EOF
 
-# 17. Steam Download Optimization (steam_dev.cfg)
+# 18. Steam Download Optimization (steam_dev.cfg)
 echo "Applying Steam download optimizations..."
 mkdir -p "$HOME/.steam/steam/"
 cat <<EOF > "$HOME/.steam/steam/steam_dev.cfg"
@@ -234,19 +256,17 @@ cat <<EOF > "$HOME/.steam/steam/steam_dev.cfg"
 @fDownloadRateImprovementToAddAnotherConnection 1.0
 EOF
 
-# 18. Download Dotfiles using npx degit
+# 19. Download Dotfiles using npx degit
 echo "Installing Node.js for dotfile deployment..."
 sudo pacman -S --noconfirm nodejs npm
 
 echo "Downloading configuration folders from GitHub..."
-# List of folders to grab from .config/
 CONFIG_FOLDERS=(
     "hypr" "kitty" "alacritty" "dunst" "fastfetch" 
     "mpv" "MangoHud" "nvim" "nwg-look" "pypr" 
     "ranger" "wallpapers" "waybar" "wlogout" "wofi" "rofi"
 )
 
-# List of specific files to grab from .config/
 CONFIG_FILES=(
     "starship.toml" "chrome-flags.conf"
 )
@@ -275,7 +295,7 @@ for file in "${CONFIG_FILES[@]}"; do
     fi
 done
 
-# 19. Fetch .zshrc to home directory
+# 20. Fetch .zshrc to home directory
 echo "Fetching .zshrc..."
 if [ -f "$HOME/.zshrc" ]; then
     mv "$HOME/.zshrc" "$HOME/.zshrc.backup"
@@ -286,24 +306,21 @@ if ! curl -fLo ~/.zshrc https://raw.githubusercontent.com/owlsly94/dotfiles/refs
     echo "Warning: Failed to fetch .zshrc, skipping..."
 fi
 
-# 20. Fetch and extract zsh.tar.gz to ~/.config
+# 21. Fetch and extract zsh.tar.gz to ~/.config
 echo "Fetching and extracting zsh configuration archive..."
 if ! curl -fLo /tmp/zsh.tar.gz https://github.com/owlsly94/dotfiles/raw/refs/heads/main/.config/zsh.tar.gz; then
     echo "Warning: Failed to fetch zsh.tar.gz, skipping..."
 else
-    # Backup existing zsh folder if it exists
     if [ -d "$HOME/.config/zsh" ]; then
         mv "$HOME/.config/zsh" "$HOME/.config/zsh.backup"
         echo "Backed up existing zsh folder to zsh.backup"
     fi
-    
-    # Extract to ~/.config
     tar -xzf /tmp/zsh.tar.gz -C ~/.config/
     rm /tmp/zsh.tar.gz
     echo "zsh configuration extracted successfully"
 fi
 
-# 21. Generate installed packages list
+# 22. Generate installed packages list
 echo "Generating installed packages list..."
 pacman -Qqe > ~/installed-packages.txt
 
@@ -314,15 +331,16 @@ echo " - Pacman: Fast & Colorful with auto-cleanup"
 echo " - Mirrors: Rated by speed (auto-updates monthly)"
 echo " - Makepkg: Optimized for $(nproc) cores"
 echo " - I/O Scheduler: Optimized for NVMe/SSD"
-echo " - Swappiness: Set to 10 for desktop responsiveness"
-echo " - CPU: Locked to Performance"
-echo " - TRIM: Enabled weekly for SSD health"
+echo " - Swappiness: Set to 10 | vfs_cache_pressure: 50 | BBR enabled"
+echo " - CPU: Performance governor via cpupower (persistent)"
+echo " - TRIM: Enabled weekly for NVMe/SSD health"
 echo " - Zram: Configured for compressed swap"
 echo " - Earlyoom: Prevents system freeze from memory issues"
 echo " - Font Rendering: Subpixel RGB + LCD filtering enabled"
 echo " - Libvirt: Active & Group assigned"
 echo " - SDDM: Autologin to Hyprland enabled"
 echo " - Steam: HTTP2 disabled for faster downloads"
+echo " - /etc/environment: AMD GPU + Wayland fully configured"
 echo " - Dotfiles: All dotfiles downloaded and set"
 echo " - Zsh: .zshrc and zsh config deployed"
 echo ""
