@@ -1,5 +1,6 @@
 alacritty
 amd-ucode
+amf-headers
 audacity
 base
 base-devel
@@ -25,6 +26,7 @@ fastfetch
 faugus-launcher
 ffmpegthumbnailer
 firefox
+flatpak
 flite
 gamemode
 gamescope
@@ -48,6 +50,7 @@ hyprlock
 imv
 iptables-nft
 iwd
+jdk21-graalvm-bin
 jellyfin-desktop
 kdenlive
 kitty
@@ -165,8 +168,8 @@ wlogout
 wofi
 wpa_supplicant
 xboxdrv
-xdg-desktop-portal-hyprland
 xdg-desktop-portal-gtk
+xdg-desktop-portal-hyprland
 xdg-user-dirs
 xdg-utils
 xf86-video-amdgpu
