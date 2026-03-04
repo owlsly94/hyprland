@@ -16,7 +16,6 @@ cpupower
 discord
 dmidecode
 dnsmasq
-dolphin
 dunst
 earlyoom
 easyeffects
@@ -86,7 +85,6 @@ megatools
 mesa-tkg-git
 mkinitcpio-firmware
 mpv
-nano
 nbtexplorer-bin
 neovim
 network-manager-applet
@@ -97,6 +95,7 @@ nwg-look
 obs-studio
 openbsd-netcat
 orca
+pamixer
 papirus-icon-theme
 pavucontrol
 pipewire
@@ -104,12 +103,12 @@ pipewire-alsa
 pipewire-jack
 pipewire-pulse
 polkit-gnome
-polkit-kde-agent
 power-profiles-daemon
 prismlauncher
 protonup-qt
 pyprland
 python-pipx
+qbittorrent
 qemu-full
 qt5-wayland
 qt5ct
@@ -165,17 +164,13 @@ wireless_tools
 wireplumber
 wl-clipboard
 wlogout
-wofi
 wpa_supplicant
-xboxdrv
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 xdg-user-dirs
 xdg-utils
 xf86-video-amdgpu
-xf86-video-ati
 xorg-server
-xorg-xinit
 yay
 zen-browser-bin
 zip
