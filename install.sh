@@ -238,8 +238,9 @@ EOF
 echo "Applying Steam download optimizations..."
 mkdir -p "$HOME/.steam/steam/"
 cat <<EOF > "$HOME/.steam/steam/steam_dev.cfg"
-@nClientDownloadEnableHTTP2PlatformLinux 0
-@fDownloadRateImprovementToAddAnotherConnection 1.0
+@nClientDownloadEnableHTTP2PlatformLinux=0
+@fDownloadRateImprovementToAddAnotherConnection=0.01
+@cMaxInitialDownloadSources=10
 EOF
 
 # 19. Download Dotfiles using npx degit
