@@ -1,6 +1,7 @@
 alacritty
 amd-ucode
 amf-headers
+awww
 audacity
 base
 base-devel
@@ -130,7 +131,6 @@ starship
 steam
 sudo
 swtpm
-swww
 thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
